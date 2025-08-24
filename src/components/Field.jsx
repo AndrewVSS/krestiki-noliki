@@ -1,70 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { store } from '../store.js';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import './Field.css';
 
 function Field() {
-    const [, setVersion] = useState(0);
+    const { field, status } = useSelector(state => state);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        const unsubscribe = store.subscribe(() => setVersion(v => v + 1));
-        return unsubscribe;
-    }, []);
-
-    const { field, status } = store.getState();
-
-    const handleCellClick = index => {
+    const handleCellClick = idx => {
         if (status !== 'process') return;
-        store.dispatch({ type: 'SET_FIELD', payload: { index } });
+        dispatch({ type: 'SET_FIELD', payload: { index: idx } });
     };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginTop: 30,
-            }}
-        >
-            <div
-                style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 50px)',
-                    gap: 20,
-                }}
-            >
-                {field.map((cell, idx) => (
-                    <button
-                        key={idx}
-                        style={{
-                            width: 50,
-                            height: 50,
-                            fontSize: 24,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 6,
-                        }}
-                        onClick={() => handleCellClick(idx)}
-                    >
-                        {cell}
-                    </button>
-                ))}
-            </div>
-            <button
-                onClick={() => store.dispatch({ type: 'RESTART_GAME' })}
-                style={{
-                    marginTop: 30,
-                    padding: '10px 24px',
-                    fontSize: 18,
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    background: '#222',
-                    color: '#fff',
-                    border: 'none',
-                }}
-            >
-                Перезапустить
-            </button>
+        <div className="field">
+            {field.map((cell, idx) => (
+                <button
+                    key={idx}
+                    onClick={() => handleCellClick(idx)}
+                    disabled={!!cell || status !== 'process'}
+                >
+                    {cell}
+                </button>
+            ))}
         </div>
     );
 }

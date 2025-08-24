@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { store } from '../store.js';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import './Information.css';
 
 function Information() {
-    const [, setVersion] = useState(0);
-
-    useEffect(() => {
-        const unsubscribe = store.subscribe(() => setVersion(v => v + 1));
-        return unsubscribe;
-    }, []);
-
-    const { currentPlayer, winner, status } = store.getState();
+    const { winner, status, currentPlayer } = useSelector(state => state);
+    const dispatch = useDispatch();
 
     let message = '';
     if (status === 'win') message = `Победил: ${winner}`;
@@ -19,6 +14,7 @@ function Information() {
     return (
         <>
             <div>{message}</div>
+            <button onClick={() => dispatch({ type: 'RESTART_GAME' })}>Перезапустить игру</button>
         </>
     );
 }

@@ -1,5 +1,6 @@
 import Information from './components/Information.jsx';
 import Field from './components/Field.jsx';
+import React from 'react';
 
 function Game() {
     return (

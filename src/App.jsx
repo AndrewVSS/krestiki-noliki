@@ -1,4 +1,5 @@
 import Game from './Game.jsx';
+import React from 'react';
 import './App.css';
 
 function App() {
