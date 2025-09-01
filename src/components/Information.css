@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 button {
     padding: 10px;
 }

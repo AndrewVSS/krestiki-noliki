@@ -1,29 +1,40 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import './Field.css';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-function Field() {
-    const { field, status } = useSelector(state => state);
-    const dispatch = useDispatch();
-
-    const handleCellClick = idx => {
+class Field extends Component {
+    handleCellClick = idx => {
+        const { status, makeMove } = this.props;
         if (status !== 'process') return;
-        dispatch({ type: 'SET_FIELD', payload: { index: idx } });
+        makeMove(idx);
     };
 
-    return (
-        <div className="field">
-            {field.map((cell, idx) => (
-                <button
-                    key={idx}
-                    onClick={() => handleCellClick(idx)}
-                    disabled={!!cell || status !== 'process'}
-                >
-                    {cell}
-                </button>
-            ))}
-        </div>
-    );
+    render() {
+        const { field, status } = this.props;
+
+        return (
+            <div className="grid grid-cols-3 gap-2 w-48">
+                {field.map((cell, idx) => (
+                    <button
+                        key={idx}
+                        className="w-14 h-14 bg-gray-800 text-white text-2xl flex items-center justify-center rounded-md cursor-pointer disabled:cursor-default disabled:opacity-50 hover:bg-gray-700"
+                        onClick={() => this.handleCellClick(idx)}
+                        disabled={!!cell || status !== 'process'}
+                    >
+                        {cell}
+                    </button>
+                ))}
+            </div>
+        );
+    }
 }
 
-export default Field;
+const mapStateToProps = state => ({
+    field: state.field,
+    status: state.status,
+});
+
+const mapDispatchToProps = dispatch => ({
+    makeMove: index => dispatch({ type: 'SET_FIELD', payload: { index } }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Field);

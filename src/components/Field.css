@@ -1,8 +1,8 @@
+@import 'tailwindcss';
+@tailwind utilities;
+
 .field {
-    display: grid;
     grid-template-columns: repeat(3, 50px);
-    gap: 15px;
-    margin: 0;
 }
 
 .field button {
@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer; /* только статичное значение! */
+    cursor: pointer;
 }
 .field button:disabled {
     cursor: default;
